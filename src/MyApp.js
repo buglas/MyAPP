@@ -3,14 +3,15 @@ import {
   StyleSheet,
   Text,
   Image,
-  View
+  View,
+  FlatList
 } from 'react-native';
 
 import Item from './components/Item';
+import movies from '../movies.json'
 
 const styles = StyleSheet.create({
-  items: {
-    flexDirection:'row',
+  row: {
     padding:5,
     marginTop:5
   }
@@ -20,9 +21,13 @@ export default class MyApp extends Component {
   render() {
     return (
       <View style={styles.items}>
-		<Item/>
-		<Item/>
-		<Item/>
+		<FlatList
+			numColumns={3}
+			columnWrapperStyle={styles.row}
+			keyExtractor={item=>item.id}
+			data={movies.subjects}
+			renderItem={({item})=> <Item title={item.title} image={item.images.medium} />}
+		/>
       </View>
     );
   }

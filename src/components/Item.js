@@ -29,19 +29,19 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Item extends Component {
-  render() {
-    return (
-      <View style={styles.item}>
-        <Image style={styles.image} source={require('../img/poster.jpg')}/>
-    		<Text style={styles.title} numberOfLines={1}>
-    			金刚狼3：殊死一战
-    		</Text>
-      </View>
-    );
-  }
+const Item = (props) =>{
+  const {title,image}=props;
+  return (
+    <View style={styles.item}>
+      <Image style={styles.image} source={{uri:image}}/>
+      <Text style={styles.title} numberOfLines={1}>
+        {title}
+      </Text>
+    </View>
+  );
 }
 
+export default Item
 
 
 
