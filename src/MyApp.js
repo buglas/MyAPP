@@ -13,7 +13,7 @@ import movies from '../movies.json'
 const styles = StyleSheet.create({
   row: {
     padding:5,
-    marginTop:5
+    marginTop:10,
   }
 });
 
@@ -26,7 +26,12 @@ export default class MyApp extends Component {
 			columnWrapperStyle={styles.row}
 			keyExtractor={item=>item.id}
 			data={movies.subjects}
-			renderItem={({item})=> <Item title={item.title} image={item.images.medium} />}
+			renderItem={({item})=> 
+				<Item 
+					title={item.title} 
+					image={item.images.medium}
+					stars={item.rating.stars} />
+			}
 		/>
       </View>
     );
