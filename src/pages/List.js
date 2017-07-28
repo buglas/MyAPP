@@ -24,7 +24,6 @@ const api='https://api.douban.com/v2/movie/in_theaters';
 export default class List extends Component {
     static navigationOptions={
         title:'list',
-        header:null
     };
     state={
         movies:[],

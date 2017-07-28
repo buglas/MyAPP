@@ -52087,9 +52087,25 @@ var _Detail = require(380             ); // 380 = ./pages/Detail
 
 var _Detail2 = babelHelpers.interopRequireDefault(_Detail);
 
-var MyApp = (0, _reactNavigation.StackNavigator)({
+var _Cinemas = require(381              ); // 381 = ./pages/Cinemas
+
+var _Cinemas2 = babelHelpers.interopRequireDefault(_Cinemas);
+
+var _MyMovies = require(382               ); // 382 = ./pages/MyMovies
+
+var _MyMovies2 = babelHelpers.interopRequireDefault(_MyMovies);
+
+var MyTab = (0, _reactNavigation.TabNavigator)({
     List: { screen: _List2.default },
+    Cinemas: { screen: _Cinemas2.default },
+    MyMovies: { screen: _MyMovies2.default }
+});
+
+var MyApp = (0, _reactNavigation.StackNavigator)({
+    MyTab: { screen: MyTab },
     Detail: { screen: _Detail2.default }
+}, {
+    headerMode: 'screen'
 });
 
 exports.default = MyApp;
@@ -59069,7 +59085,8 @@ var List = function (_Component) {
         return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = List.__proto__ || Object.getPrototypeOf(List)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
             movies: [],
             refreshing: false,
-            ready: false
+            ready: false,
+            childState: ''
         }, _this.refreshing = false, _this.start = 0, _this.count = 12, _this.fetchData = function () {
             var start = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
             var count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 12;
@@ -59169,18 +59186,33 @@ var List = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
+            var _this3 = this;
+
             var _state = this.state,
                 movies = _state.movies,
                 refreshing = _state.refreshing,
-                ready = _state.ready;
+                ready = _state.ready,
+                childState = _state.childState;
+            var navigate = this.props.navigation.navigate;
 
             return _react2.default.createElement(
                 _reactNative.View,
                 { style: styles.items, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 87
+                        lineNumber: 90
                     }
                 },
+                _react2.default.createElement(
+                    _reactNative.Text,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 91
+                        }
+                    },
+                    '\u5B50\u7EC4\u4EF6\u4F20\u56DE\u7684\u6570\u636E\uFF1A',
+                    childState
+                ),
                 ready ? _react2.default.createElement(_reactNative.FlatList, {
                     numColumns: 3,
                     columnWrapperStyle: styles.row,
@@ -59195,7 +59227,7 @@ var List = function (_Component) {
                     ListFooterComponent: function ListFooterComponent() {
                         return refreshing && _react2.default.createElement(_reactNative.ActivityIndicator, { size: 'large', __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 100
+                                lineNumber: 105
                             }
                         });
                     },
@@ -59203,21 +59235,31 @@ var List = function (_Component) {
                         var item = _ref2.item;
 
                         return _react2.default.createElement(_Item2.default, {
+                            onPress: function onPress() {
+                                return navigate('Detail', {
+                                    id: item.id,
+                                    callBack: function callBack(data) {
+                                        _this3.setState({
+                                            childState: data
+                                        });
+                                    }
+                                });
+                            },
                             title: item.title,
                             image: item.images.medium,
                             stars: item.rating.stars, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 103
+                                lineNumber: 108
                             }
                         });
                     },
                     __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 89
+                        lineNumber: 94
                     }
                 }) : _react2.default.createElement(_reactNative.ActivityIndicator, { size: 'large', style: styles.loading, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 111
+                        lineNumber: 127
                     }
                 })
             );
@@ -59227,7 +59269,8 @@ var List = function (_Component) {
 }(_react.Component);
 
 List.navigationOptions = {
-    title: 'list'
+    title: 'list',
+    header: null
 };
 exports.default = List;
 }, 373, null, "MyApp/src/pages/List.js");
@@ -59305,7 +59348,7 @@ var renderStars = function renderStars(stars) {
       source: require(375                   ), // 375 = ../img/star-full.png
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 63
+        lineNumber: 64
       }
     }));
   }
@@ -59316,7 +59359,7 @@ var renderStars = function renderStars(stars) {
       source: require(376                   ), // 376 = ../img/star-half.png
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 72
+        lineNumber: 73
       }
     }));
   }
@@ -59327,7 +59370,7 @@ var renderStars = function renderStars(stars) {
       source: require(377                    ), // 377 = ../img/star-empty.png
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 81
+        lineNumber: 82
       }
     }));
   }
@@ -59335,7 +59378,7 @@ var renderStars = function renderStars(stars) {
     _reactNative.View,
     { style: styles.stars, __source: {
         fileName: _jsxFileName,
-        lineNumber: 89
+        lineNumber: 90
       }
     },
     starArr
@@ -59345,30 +59388,39 @@ var renderStars = function renderStars(stars) {
 var Item = function Item(props) {
   var title = props.title,
       image = props.image,
-      stars = props.stars;
+      stars = props.stars,
+      onPress = props.onPress;
 
   return _react2.default.createElement(
     _reactNative.View,
     { style: styles.item, __source: {
         fileName: _jsxFileName,
-        lineNumber: 98
-      }
-    },
-    _react2.default.createElement(_reactNative.Image, { style: styles.image, source: { uri: image }, __source: {
-        fileName: _jsxFileName,
         lineNumber: 99
       }
-    }),
+    },
     _react2.default.createElement(
-      _reactNative.Text,
-      { style: styles.title, numberOfLines: 1, __source: {
+      _reactNative.TouchableOpacity,
+      { onPress: onPress, __source: {
           fileName: _jsxFileName,
           lineNumber: 100
         }
       },
-      title
-    ),
-    renderStars(stars)
+      _react2.default.createElement(_reactNative.Image, { style: styles.image, source: { uri: image }, __source: {
+          fileName: _jsxFileName,
+          lineNumber: 101
+        }
+      }),
+      _react2.default.createElement(
+        _reactNative.Text,
+        { style: styles.title, numberOfLines: 1, __source: {
+            fileName: _jsxFileName,
+            lineNumber: 102
+          }
+        },
+        title
+      ),
+      renderStars(stars)
+    )
   );
 };
 
@@ -59982,11 +60034,16 @@ var Detail = function (_Component) {
     babelHelpers.createClass(Detail, [{
         key: 'render',
         value: function render() {
+            var _props$navigation = this.props.navigation,
+                state = _props$navigation.state,
+                goBack = _props$navigation.goBack;
+
             return _react2.default.createElement(
                 _reactNative.View,
-                { style: styles.items, __source: {
+                {
+                    __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 18
+                        lineNumber: 19
                     }
                 },
                 _react2.default.createElement(
@@ -59994,10 +60051,33 @@ var Detail = function (_Component) {
                     {
                         __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 19
+                            lineNumber: 20
                         }
                     },
                     '\u7535\u5F71\u8BE6\u60C5\u9875'
+                ),
+                _react2.default.createElement(
+                    _reactNative.Text,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 21
+                        }
+                    },
+                    '\u7535\u5F71id\uFF1A',
+                    state.params.id
+                ),
+                _react2.default.createElement(
+                    _reactNative.Text,
+                    { onPress: function onPress() {
+                            state.params.callBack('Child info...');
+                            goBack();
+                        }, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 22
+                        }
+                    },
+                    '\u8FD4\u56DE'
                 )
             );
         }
@@ -60010,6 +60090,108 @@ Detail.navigationOptions = {
 };
 exports.default = Detail;
 }, 380, null, "MyApp/src/pages/Detail.js");
+__d(/* MyApp/src/pages/Cinemas.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = 'E:\\me2\\MyApp\\src\\pages\\Cinemas.js';
+
+var _react = require(13     ); // 13 = react
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require(27            ); // 27 = react-native
+
+var Cinemas = function (_Component) {
+    babelHelpers.inherits(Cinemas, _Component);
+
+    function Cinemas() {
+        babelHelpers.classCallCheck(this, Cinemas);
+        return babelHelpers.possibleConstructorReturn(this, (Cinemas.__proto__ || Object.getPrototypeOf(Cinemas)).apply(this, arguments));
+    }
+
+    babelHelpers.createClass(Cinemas, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                _reactNative.View,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 18
+                    }
+                },
+                _react2.default.createElement(
+                    _reactNative.Text,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 19
+                        }
+                    },
+                    'cinemas'
+                )
+            );
+        }
+    }]);
+    return Cinemas;
+}(_react.Component);
+
+Cinemas.navigationOptions = {
+    title: 'cinemas'
+};
+exports.default = Cinemas;
+}, 381, null, "MyApp/src/pages/Cinemas.js");
+__d(/* MyApp/src/pages/MyMovies.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _jsxFileName = 'E:\\me2\\MyApp\\src\\pages\\MyMovies.js';
+
+var _react = require(13     ); // 13 = react
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require(27            ); // 27 = react-native
+
+var MyMovies = function (_Component) {
+    babelHelpers.inherits(MyMovies, _Component);
+
+    function MyMovies() {
+        babelHelpers.classCallCheck(this, MyMovies);
+        return babelHelpers.possibleConstructorReturn(this, (MyMovies.__proto__ || Object.getPrototypeOf(MyMovies)).apply(this, arguments));
+    }
+
+    babelHelpers.createClass(MyMovies, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                _reactNative.View,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 18
+                    }
+                },
+                _react2.default.createElement(
+                    _reactNative.Text,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 19
+                        }
+                    },
+                    'myMovies'
+                )
+            );
+        }
+    }]);
+    return MyMovies;
+}(_react.Component);
+
+MyMovies.navigationOptions = {
+    title: 'myMovies'
+};
+exports.default = MyMovies;
+}, 382, null, "MyApp/src/pages/MyMovies.js");
 ;require(50);
 ;require(0);
 //# sourceMappingURL=index.android.map
