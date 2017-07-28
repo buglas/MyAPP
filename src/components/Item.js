@@ -5,6 +5,7 @@ import {
   Image,
   View,
   Dimensions,
+  TouchableOpacity
 } from 'react-native';
 
 const {width,height} = Dimensions.get('window');
@@ -93,14 +94,16 @@ const renderStars=(stars)=>{
 }
 
 const Item = (props) =>{
-  const {title,image,stars}=props;
+  const {title,image,stars,onPress}=props;
   return (
     <View style={styles.item}>
-      <Image style={styles.image} source={{uri:image}}/>
-      <Text style={styles.title} numberOfLines={1}>
-        {title}
-      </Text>
-      {renderStars(stars)}
+      <TouchableOpacity onPress={onPress}>
+        <Image style={styles.image} source={{uri:image}}/>
+        <Text style={styles.title} numberOfLines={1}>
+          {title}
+        </Text>
+        {renderStars(stars)}
+      </TouchableOpacity>
     </View>
   );
 }
